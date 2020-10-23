@@ -1,18 +1,96 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+//Prim's Algorithm
+//prime algo
+#include<bits/stdc++.h>
+using namespace std;
+int get_index(int *weight,int n,bool *visited)//provide maine vertrix index
+{
+	int minvertrix=-1;
+	for(int i=0;i<n;i++)
+	{
+		if((visited[i]==0&&(minvertrix==-1||weight[minvertrix]>weight[i])))//importent contition
+		{
+	
+			minvertrix=i;
+		}
+	}
+	 
+	return minvertrix;
+}
+void prim(int** edge,int n)
+{
+	int *weight=new int[n];//weight array
+	for(int i=0;i<n;i++)
+	{
+		weight[i]=INT_MAX;
+	}
+	int *parent=new int[n];//index maintaining array
+	weight[0]=0;
+	parent[0]=-1;
+	bool *visited=new bool[n]();//visited array
+	for(int i=0;i<n-1;i++)
+	{
+		int minvertrix=get_index(weight,n,visited);//here , maine index
+		visited[minvertrix]=1;//filling visited array
+		for(int j=0;j<n;j++)
+		{
+			if(visited[j]==false&&edge[minvertrix][j]!=0)
+			{
+				if(weight[j]>edge[minvertrix][j])//filling weight array and parent array
+				{
+					weight[j]=edge[minvertrix][j];
+					parent[j]=minvertrix;
+				}
+			}
+		}
+	}
+	
+	//printing 
+	for(int i=1;i<n;i++)
+	{
+		if(parent[i]<i)
+		{
+			cout<<parent[i]<<" "<<i<<" "<<weight[i]<<endl;
+		}
+		else
+		{
+			cout<<i<<" "<<parent[i]<<" "<<weight[i]<<endl;
+		}
+	}
+}
+int main()
+{
+	int v,e;
+	cin>>v>>e;//enter the number of node's and number of edge between node
+	int **edge=new int*[v];//create 2-d array(dynamically)
+	for(int i=0;i<v;i++)
+	{
+		edge[i]=new int[v];
+	}
+	//putting weight
+	for(int i=0;i<e;i++)
+	{
+		int x,y,weight;//enter the edge node's and it's correspounding weight
+		cin>>x>>y>>weight;
+		edge[x][y]=weight;
+		edge[y][x]=weight;
+	}
+	prim(edge,v);//void type ,,PRIM algorithm
+	return 0;
+}
+/*
+input:-
+5 7
+0 1 4
+0 2 8
+1 2 2
+1 3 6
+2 3 3
+2 4 9
+3 4 5
+output:-
 
-# Other files and folders
-.settings/
-
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+0 1 4
+1 2 2
+2 3 3
+3 4 5
+*/
